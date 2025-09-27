@@ -45,6 +45,7 @@ with st.form("search_form"):
     if submitted and movie_input:
         with st.spinner("Finding recommendations for you..."):
             matches = [m[0] for m in process.extractBests(movie_input, movies["title"].tolist(), limit=10)]
+            
             if matches:
                 movie_name = st.selectbox("Select a movie from top matches:", matches)
                 if movie_name:
@@ -53,8 +54,14 @@ with st.form("search_form"):
                     recs["rating"] = recs["rating"].fillna("No rating")
                     recs.reset_index(drop=True, inplace=True)
                     recs.index += 1
-                    recs = recs.rename(columns={"title": "Title"})
+                    recs = recs.rename(columns={
+                        "title": "Title",
+                        "year": "Year",
+                        "rating": "Rating",
+                        "genres": "Genres"
+                    })
                     st.success(f"Showing recommendations for: {movie_name}")
                     st.dataframe(recs, use_container_width=True)
             else:
                 st.warning("No matches found. Try typing a different title.")
+
