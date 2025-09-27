@@ -13,11 +13,9 @@ def load_movies():
     movies = pd.read_csv("data/movies.csv")
     ratings = pd.read_csv("data/ratings.csv")
 
-    # Compute average rating
     avg_ratings = ratings.groupby("movieId")["rating"].mean()
     movies["rating"] = movies["movieId"].map(avg_ratings).round(1)
 
-    # Extract year from title
     movies["year"] = movies["title"].apply(
         lambda t: int(re.search(r"\((\d{4})\)", t).group(1)) if re.search(r"\((\d{4})\)", t) else pd.NA
     ).astype("Int64")
